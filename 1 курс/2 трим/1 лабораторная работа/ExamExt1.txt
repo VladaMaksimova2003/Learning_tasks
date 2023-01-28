@@ -1,0 +1,47 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+#include "pt4exam.h"
+using namespace std;
+//На вход подаются сведения о клиентах фитнес - центра.В первой строке указывается целое число N, а каждая из последующих N строк имеет формат
+//<Продолжительность занятий(в часах)> <Год> <Номер месяца> <Код клиента>
+//Все данные целочисленные.Значение года лежит в диапазоне от 2000 до 2010, 
+//код клиента — в диапазоне 10−99, продолжительность занятий — в диапазоне 1−30.
+//Найти строку исходных данных с минимальной продолжительностью занятий. Выввести продолжительность, а так же
+//соответствующие год и месяц. Если есть несколько минимальных, то вывести последний в наборе.
+struct User{
+    string code;
+    int  year;
+    int month;
+    int clock;
+};
+
+void Solve()
+{
+    Task("ExamExt1");
+    string str, code, year, month, clock;
+    vector <User> v;
+    int min_temp = 30;
+    User p;
+    cin >> str;
+    int count = stoi(str);
+    for (int i = 0; i < count; i++) {
+        cin >> code >> year >> month >> clock;
+        p.code = code;
+        p.year = stoi(year);
+        p.month = stoi(month);
+        p.clock = stoi(clock);
+        v.push_back(p);
+    }//запись в вектор входных данных
+
+    for (auto iter = v.begin(); iter != v.end(); iter++) {
+        if (iter->clock <= min_temp) {
+            min_temp = iter->clock;
+            month = to_string(iter->month);
+            year = to_string(iter->year);
+        }
+    }
+    cout << min_temp << "\n" << year << "\n" << month;
+}

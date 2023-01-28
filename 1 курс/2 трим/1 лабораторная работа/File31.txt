@@ -1,0 +1,52 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <errno.h>
+#include <iostream>
+#include <fstream>
+using namespace std;
+//Дан файл целых чисел, содержащий более 50 элементов.
+//Уменьшить его размер до 50 элементов,
+//удалив из файла необходимое количество начальных элементов.
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	string str;
+	int i = 0;
+	int size;
+
+		int a;
+		fstream f, f1;
+		f.open("a.dat", ios::out | ios::binary);
+		f1.open("b.dat", ios::out | ios::binary);
+			for (int i = 0; i < 60; i++) {
+				cin >> a;
+				f.write((char*)&a, sizeof(a));//в созданный файл записываем нужное количество чисел 
+			}
+		f.close();
+		f.open("a.dat", ios::in | ios::binary);
+		f.seekg(0, ios::end);
+		size = f.tellg()/ sizeof(a);
+		i = size - 50;//вычисляем 50 последних чисел из данного набора 
+
+
+		for (; i < size; ++i) {
+			f.seekg(sizeof(a) * i, ios::beg);
+			f.read((char*)&a, sizeof(a));
+			cout << a;
+			f1.write((char*)&a, sizeof(a));
+
+		} 
+
+		f.close();
+		f1.close();
+
+
+		remove("a.dat");//удаление файла
+		if (rename("b.dat", "a.dat") == 0)// переименование файла
+			std::cout << " Файл успешно переименован";
+		else
+			std::cout << "Error: " << strerror(errno) << std::endl;
+		
+		
+	
+
+}

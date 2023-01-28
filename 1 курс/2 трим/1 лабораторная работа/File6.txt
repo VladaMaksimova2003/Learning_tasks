@@ -1,0 +1,38 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+//File6. Дано целое число K и файл, содержащий неотрицательные целые числа.
+//Вывести K-й элемент файла (элементы нумеруются от 1).
+//Если такой элемент отсутствует, то вывести −1.
+typedef unsigned int uint;
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	//uint a;
+	//ofstream fout("txt.dat", ios_base::binary);
+	//for (int i = 0; i < 5; i++) {
+	//	cin >> a;
+	//	fout.write((char*)&a, sizeof(a));
+	//}
+	//fout.close();
+
+	string str;
+	uint K, K1;
+	cout<< "Введите название файла";
+	cin >>str;
+	cout<< "Введите целое число К";
+	cin>> K;
+	ifstream in(str, ios::in | ios::binary);
+	if (!in) {
+		cout <<"Файл не найден";
+		return 0;
+	}
+		in.seekg(sizeof(K) * (K-1), ios::beg);//ставим указатель на нужную позицию
+		in.read((char*)&K1, sizeof(K1));//читаем информацию и запоминаем ее в К1
+
+		if (in.tellg() == -1) return -1;//Returns the position of the current character in the input stream.
+
+		in.close();
+		cout << K1;
+		return 0;
+}

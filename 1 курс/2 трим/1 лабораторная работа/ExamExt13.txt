@@ -1,0 +1,99 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+#include "pt4exam.h"
+using namespace std;
+//На вход подаются сведения о клиентах фитнес-центра. В первой строке указывается код одного из клиентов,
+//во второй целое число N , а в следующих N строках <продолжительность занятий>1-30,<год> от 2000-2010, <номер месяца>,<код клиента> от 10-99.
+//Все данные целочисленные.Для каждого кода в котором клиент с определенным кодом посещал центр, определить месяц,
+//в котором продолжительность занятий была наибольшей для данного года. Сведения выводить в новой строке упорядоченно.
+//если сведений нет вывести No data.
+struct User {
+    int code;
+    int  year;
+    int month;
+    int clock;
+};
+bool operator<(const User& a, const User& b)
+{
+    return a.year > b.year;
+}
+void Solve()
+{
+    Task("ExamExt13");
+    string str, code, year, month, clock, temp_year;
+    vector <User> v;
+    vector <User> v1;
+    int max_temp = 1;
+    int temp_code = 0;
+    int user_code = 0;
+    User p;
+    cin >> user_code;
+    cin >> str;
+    int count = stoi(str);
+
+    for (int i = 0; i < count; i++) {
+        cin >> clock >> year >> month >> code;
+        if (user_code == stoi(code)) {
+            p.code = stoi(code);
+            p.year = stoi(year);
+            p.month = stoi(month);
+            p.clock = stoi(clock);
+            v.push_back(p);
+        }
+    }//запись в вектор входных данных
+
+    sort(v.begin(), v.end());//сортировка массива по году
+
+    for (auto iter = v.begin(); iter != v.end(); ++iter) {
+
+        max_temp = iter->clock;
+        month = to_string(iter->month);
+        year = to_string(iter->year);
+
+
+        if (iter+1 < v.end()) {
+
+            ++iter;
+            temp_year = to_string(iter->year);
+            while (year == temp_year && iter < v.end()) {
+                temp_year = to_string(iter->year);
+                    if (iter->clock >= max_temp) {
+                        max_temp = iter->clock;
+                        month = to_string(iter->month);
+                        year = to_string(iter->year);
+
+                    }
+                
+                ++iter;
+                if (iter < v.end())temp_year = to_string(iter->year);
+                else break;
+            }
+            p.year = stoi(year);
+            p.month = stoi(month);
+            p.clock = max_temp;
+            v1.push_back(p);
+            max_temp = 1;
+        }
+        else {
+            if (iter->clock >= max_temp) {
+                max_temp = iter->clock;
+                month = to_string(iter->month);
+                year = to_string(iter->year);
+                p.year = stoi(year);
+                p.month = stoi(month);
+                p.clock = max_temp;
+                v1.push_back(p);
+                break;
+            }
+        }
+        --iter;
+    }
+    if (v1.empty())
+        cout << "No data" << endl;
+    for (const auto& arr1 : v1) {
+        cout << arr1.year << " " << arr1.month << " " << arr1.clock << endl;
+    }
+}
