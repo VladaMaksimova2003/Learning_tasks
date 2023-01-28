@@ -1,0 +1,55 @@
+#include "pt4.h"
+using namespace std;
+//Имеется N различных чисел. Определить подмножество чисел, которые в сумме меньше Z
+//И количественно больше К. Подмножество единственно
+int N, K, Z;//N - всего чисел, К и Z границы поиска
+int* array_number;
+char* array_flag;
+int sum;//сумма чисел
+int counter;//счетчик чисел
+
+void Print_result() {
+    for (int i = 0; i < N; ++i) {
+        if (array_flag[i] == '+')
+            pt << array_number[i];
+    }
+
+}
+void Search_number(int i) {//поиск возможных решений
+
+    ++counter;
+    sum += array_number[i];
+    array_flag[i] = '+';
+
+    if (sum < Z && counter > K) {
+        Print_result();
+    }
+    else if (sum < Z && counter <= K) {
+        for (int j = i + 1; j < N; ++j)
+            Search_number(j);
+    }
+    sum -= array_number[i];
+    --counter;
+    array_flag[i] = ' ';
+
+}
+void Solve()
+{
+    Task("BackRec7");
+    sum = 0;
+    counter = 0;
+    pt >> N >> K >> Z;
+    array_number = new int[N];
+    array_flag = new char[N];
+
+    for (int i = 0; i < N; ++i) {
+        pt >> array_number[i];
+        array_flag[i] = ' ';
+    }
+    for (int i = 0; i < N; ++i) {
+        Search_number(i);
+    }
+    delete [] array_number;
+    delete[] array_flag;
+
+}

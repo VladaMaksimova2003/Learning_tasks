@@ -1,0 +1,60 @@
+#include "pt4.h"
+#include <fstream>
+#include <stdlib.h>
+using namespace std;
+//Дан лабиринт размером NхN(N <= 15).Форма лабиринта записана в текстовом файле, cтена обозначается символом М, 
+//отсутствие стены - символом пробела.Даны координаты мышки в лабиринте(номер строки(X) и номер столбца(Y)) 
+//и координаты сыра(номер строки(XС) и номер столбца(YС)).Нужно посчитать количество возможных 
+//различных путей мышки к сыру.
+int N, XC, YC;
+void Search(char** labirint, int i, int j, int& k) {
+    if (labirint[i][j] == ' ') {
+        labirint[i][j] = '+';
+        if (i == XC && j == YC) {
+            ++k;
+        }
+        else {
+            if (i != N - 1) Search(labirint, i + 1, j, k);
+            if (i != 0) Search(labirint, i - 1, j, k);
+            if (j != N - 1) Search(labirint, i, j + 1, k);
+            if (j != 0) Search(labirint, i, j - 1, k);
+        }
+        labirint[i][j] = ' ';
+    }
+
+}
+void Solve()
+{
+    Task("BackTrack10");
+    ifstream file;
+    string str;
+    int X, Y, k = 0;
+    
+    pt >> str >> N >> X >> Y >> XC >> YC;
+    char** labirint = new char* [N];
+    X--;
+    Y--;
+    XC--;
+    YC--;
+
+    file.open(str);
+    if (!file) {
+        pt << "-1";
+        exit(0);
+    }
+    else {
+        for (int i = 0; i < N; ++i) {
+            labirint[i] = new char[N];
+        }
+        for (int i = 0; i < N; ++i) {
+            getline(file, str);
+            for (int j = 0; j < N; ++j) {
+                labirint[i][j] = str[j];
+            }
+        }
+    }
+    if (N > 0) {
+        Search(labirint, X, Y, k);
+    }
+    pt << k;
+}

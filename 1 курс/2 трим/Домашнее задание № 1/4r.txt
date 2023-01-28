@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+using namespace std;
+//Разложение в сумму.Дано натуральное число n.Написать рекурсивную процедуру генерации всех разбиений числа n на сумму слагаемых
+//n = a1 + a2 + … + ak, где k, a1, a2, …, ak > 0
+//в порядке, обратном лексикографическому.Например, при n = 4, требуется вывести 4, 3 + 1, 2 + 2, 2 + 1 + 1, 1 + 1 + 1 + 1. 
+//Разбиения считаются эквивалентными, если суммы отличаются только порядком слагаемых.
+//Формат входных данных :
+//На вход подается одно натуральное число n(n < 15).
+//    Формат выходных данных :
+//На выходе нужно получить все возможные разложения числа n в сумму слагаемых.
+//В частном случае, суммой может быть одно число.Каждую сумму выводить в отдельной строке.Если элементов суммы больше двух, то разделять
+vector<int> items;
+
+void dec(int different, int k, int i, ofstream& out) {
+
+    if (out.is_open())
+    {
+        if (different < 0) return;
+        if (different == 0) {
+            int j;
+            for (j = 0; j < i - 1; j++) {
+                out << items[j] << "+";
+            }
+            out << items[i - 1];
+            out << endl;
+        }
+        else {
+            if (different - k >= 0) {
+                items.push_back(k); // фиксируем i-ое слагаемое
+                dec(different - k, k, i + 1, out);
+                items.pop_back();
+            }
+
+            if (k - 1 > 0) {
+                dec(different, k - 1, i, out);
+
+            }
+        }
+    }
+
+    return;
+}
+int main() {
+    ofstream out;
+    out.open("a.txt");
+    int number, i, j;
+    cin >> number;
+    dec(number, number, 0, out);
+    out.close();
+    return 0;
+}
