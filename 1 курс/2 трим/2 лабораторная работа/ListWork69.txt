@@ -1,0 +1,53 @@
+#include "pt4.h"
+#include <fstream>
+using namespace std;
+PNode p1,previous, temp;
+//Дан односвязный циклический список и указатель на первый элемент. Создать текстовый файл,
+//вывести туда содержимо с шагом k.Если список заканчивается, продолжать с начала списка.
+//После вывода числа, удалять его в списке, вывод продолжать пока есть числа в списке
+int k;
+void Delete(PNode temp) {
+    if (temp->Next == temp) {
+        p1 = NULL;
+        return;
+    }
+    else {
+        while (previous->Next != temp)
+            previous = previous->Next;
+        if (previous == NULL) return;
+        previous->Next = temp->Next;
+    }
+    previous = temp->Next;
+    p1 = previous;
+    delete temp;
+}
+void Search(ofstream& file) {
+    if (file)
+    {
+        file << p1->Data;
+        Delete(p1);
+        do {
+            for (int j = 0; j < k-1; ++j) {
+                p1 = p1->Next;
+            }
+            file << " " << p1->Data;
+            Delete(p1);
+
+        } while (p1 != NULL);
+    }
+    return;
+}
+void Solve()
+{
+    Task("ListWork69");
+    ofstream file;
+    string str;
+    GetP(p1);
+    pt >> k;
+    pt >> str;
+    file.open(str);
+    previous = p1;
+    Search(file);
+    file.close();
+    delete p1, previous;
+}

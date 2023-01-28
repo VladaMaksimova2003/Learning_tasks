@@ -1,0 +1,58 @@
+#include "pt4.h"
+#include "fstream"
+using namespace std;
+//Дан текстовый фай, в первой строке написано N, во второй N чисел.
+//Необходимо создать убывающий список, чтобы при вставке не нарушался порядок
+PNode p1, p2, p3, head;
+void Push() {
+    if (!p1) {
+        p1 = p2;
+        p1->Next = NULL;
+        head = p1;
+    }//вставка 1 элемента
+    else if (head->Data < p2->Data) {
+        p2->Next = head;
+        head = p2;
+        p1 = head;//вставка вперед
+    }
+    else {//вставка после 
+        p1 = head;
+        while (p1->Data > p2->Data) {
+            if (p1->Next == NULL) {
+                break;
+            }
+            p3 = p1;//запоминаем предыдущий элемент
+            p1 = p1->Next;//перебор списка
+        }
+        if (p2->Data > p1->Data) {
+            p2->Next = p1;
+            p3->Next = p2;
+        }//вставка между элементами
+        else {
+            p1->Next = p2;
+        }//вставка в конец
+
+    }
+}
+void Solve()
+{
+    Task("ListWork62");
+    ifstream file;
+    string str, str1;
+    pt >> str;
+    file.open(str);
+    if (file) {
+        file >> str1;
+        file >> str1;
+        do {
+            p2 = new TNode;
+            p2->Data = stoi(str1);
+            p2->Next = NULL;
+            Push();
+            file >> str1;
+        } while (!file.eof());
+    }
+    delete p1, p2, p3;
+    PutP(head);
+
+}

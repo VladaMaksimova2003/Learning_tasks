@@ -1,0 +1,34 @@
+#include "pt4.h"
+using namespace std;
+//Дан односвязный линейный список и указатель на голову списка. Необходимо
+//вставить значение М перед каждым вторым элементом и вывести ссылку на последний элемент списка.
+//При нечетном количестве вставялть в конец не нужно.
+PNode p1;
+PNode p2, p3;
+int i = 3, M;
+
+void Add() {
+    p3 = new TNode;
+    while (p1->Next != NULL){
+        if (i == 3 && p1->Next != NULL) {
+            p2 = new TNode;
+            p2->Data = M;
+            p2->Next = p1->Next;
+            p1->Next = p2;
+            i = 0;
+        }
+        else {
+            ++i;
+            p3 = p1;
+            p1 = p1->Next;
+        }
+    }
+}
+void Solve()
+{
+    Task("ListWork25");
+    pt >> M;
+    GetP(p1);
+    Add();
+    PutP(p3->Next);
+}
