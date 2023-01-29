@@ -1,0 +1,18 @@
+#include "pt4.h"
+using namespace std;
+//Дано бинарное дерево и указатель на корень дерева р1. Вывести содержимое листье слево напрво 
+void Free_Print(PNode p1) {
+    if (p1 != NULL) {
+        Free_Print(p1->Left);
+        if (p1->Right == NULL && p1->Left == NULL) pt << p1->Data;
+        Free_Print(p1->Right);
+    }
+}
+void Solve()
+{
+    Task("TreeWork4");
+    PNode p1;
+    GetP(p1);
+    Free_Print(p1);
+
+}
