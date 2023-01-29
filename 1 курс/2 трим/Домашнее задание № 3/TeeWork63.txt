@@ -1,0 +1,51 @@
+#include "pt4.h"
+#include <fstream>
+using namespace std;
+//Дано бинарное дерево. Написать процедуру, которая формирует массив содержащая вершины,
+//находящиеся на уровне N, перечисляя их слева направо. Массив распечатать в файл, каждый уровень в свой строке.
+//Числа раздлять пробелом, в конце пробел не ставить
+bool Print(PNode p1, int level,int* array, int& i)
+{
+    if (p1 == NULL) {
+        return false;
+    }
+
+    if (level == 0)
+    {
+        array[i] = p1->Data;
+        ++i;
+        return true;
+    }
+
+    bool left = Print(p1->Left, level - 1,array, i);
+    bool right = Print(p1->Right, level - 1, array, i);
+
+    return left || right;
+}
+
+void Solve()
+{
+    Task("TreeWork63");
+    PNode p1;
+    string str;
+    int level = 0, i = 0;
+    int array[256];
+    GetP(p1);
+    pt >> str;
+    ofstream file;
+    file.open(str);
+    if (file) {
+        while (Print(p1, level, array, i)) {
+            level++;
+            file << array[0];
+            for (int j = 1; j < i; ++j) {
+                file << " " << array[j];
+            }
+            file << "\n";
+            i = 0;
+        }
+    }
+    file.close();
+
+    return;
+}

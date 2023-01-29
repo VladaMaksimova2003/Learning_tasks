@@ -1,0 +1,110 @@
+#include "pt4.h"
+#include <fstream>
+using namespace std;
+//В первой строке текстового файла записаны целые числа. Создать дерево поиска, последовательно включая в него
+//числа из файла, привести дерево к авл-сбалансированному виду, выполнив LR-поворот. Известно, что треубется не более
+//одного поворота.Вывести указатель на корень
+PNode Head = NULL;
+int Height(PNode& p) {//вычисляем высоты
+    if (p == NULL)return 0;
+    int Left = Height(p->Left);
+    int Right = Height(p->Right);
+    if (Left > Right)return Left + 1;
+    else return Right + 1;
+}
+int Balance(PNode &p) {//нахождение баланса
+    int r = 0,l = 0;
+    if (p != NULL) {
+        r = Height(p->Right);
+        l = Height(p->Left);
+    }
+        return r - l;
+}
+void LR(PNode& n) {//перестановка
+     PNode p;
+     PNode tp;
+     PNode tp2;
+    p = n;
+    tp = p->Left;
+    tp2 = p->Left->Right;
+
+    p->Left = tp2->Right;
+    tp->Right = tp2->Left;
+    tp2->Right = p;
+    tp2->Left = tp;
+    n = tp2;
+}
+
+void branch_difference(PNode& p,PNode& temp, int prev_balance) {
+
+    int right_diff = 0, left_diff = 0;
+    int balance = Balance(p);
+    if (balance < -1)
+        left_diff = Height(p->Left->Right) - Height(p->Left->Left);//вычисляем наперед баланс для левой ветки
+    else
+        right_diff = Height(p->Right->Right) - Height(p->Right->Left);//вычисляем наперед баланс правой ветки
+    if (p != NULL) {
+            if ((right_diff < -1 || right_diff > 1) && balance > 1 || balance == 1) {
+                temp = p;
+                p = p->Right;
+                branch_difference(p, temp,balance);
+            }//передвигаемся вправо, если не нашли элементы для перестановки
+            else if ((left_diff < -1 || left_diff > 1) && balance < 1 || balance == -1) {
+                temp = p;
+                p = p->Left;  
+                branch_difference(p, temp, balance);
+            }//передвигаемся влево, если не нашли элементы для перестановки
+            else {               
+                if (temp != p) {
+                    LR(p);
+                    if (prev_balance == -2 || prev_balance == -1)
+                        temp->Left = p;
+                    else temp->Right = p;
+                }//связуем предыдущий элемент с переставленными
+                else {
+                        LR(p);
+                        Head = p;                    
+                }//если перестановка попадает на самое начало
+            }            
+    }
+}
+
+void Insert(PNode& p,int data) {//вставка элементов из файла в дерево
+    if (p == NULL) {
+        PNode n = new TNode;
+        n->Data = data;
+        p = n;
+        p->Left = p->Right = NULL;
+
+    }//добавление нового узла
+    else {
+        if (data < p->Data)
+            Insert(p->Left, data);
+        else
+            Insert(p->Right, data);
+    }
+}
+void Solve()
+{
+    Task("TreeWork66");
+    ifstream file;
+    PNode p = NULL;
+    PNode temp;
+    string str;
+    int data;
+    pt >> str;
+    file.open(str);
+    if (file) {
+        while (!file.eof()) {
+            file >> str;
+            data = stoi(str);
+            Insert(p, data);
+
+        }//заполняем дерево
+        Head = p;//запоминаем,где у нас начало 
+        temp = p;
+        branch_difference(p, temp, 0);
+    }
+    PutP(Head);//вывод готового дерева
+    file.close();
+}
