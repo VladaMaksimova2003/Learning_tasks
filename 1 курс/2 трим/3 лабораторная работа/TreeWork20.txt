@@ -1,0 +1,32 @@
+#include "pt4.h"
+using namespace std;
+//Дано бинарное дерево и указатель на корень дерева. Необходимо определить является ли деерво АВЛ сбалансированным
+//Вывести логическое значение
+int Balanced(PNode root, bool& balanced)
+{
+    if (root == nullptr || !balanced) {
+        return 0;
+    }
+    int Left_height = Balanced(root->Left, balanced);
+    int Right_height = Balanced(root->Right, balanced);
+    if (abs(Left_height - Right_height) > 1) {
+        balanced = false;
+    }
+    return max(Left_height, Right_height) + 1;
+}
+
+bool Balance(PNode root)
+{
+    bool balance = true;
+    Balanced(root, balance);
+    return balance;
+}
+void Solve()
+{
+    Task("TreeWork20");
+    PNode p = NULL;
+    PNode p1 = NULL;
+    GetP(p);
+    pt << Balance(p);
+
+}
