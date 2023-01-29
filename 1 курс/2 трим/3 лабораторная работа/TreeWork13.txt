@@ -1,0 +1,19 @@
+#include "pt4.h"
+using namespace std;
+//Дан указатель Р1 на корень непустого дерева. Вывести количество листьев
+void Free_Print(PNode p1, int& count) {
+    if (p1 != NULL) {
+        Free_Print(p1->Left, count);
+        if (p1->Right == NULL && p1->Left == NULL) ++count;
+        Free_Print(p1->Right, count);
+    }
+}
+void Solve()
+{
+    Task("TreeWork13");
+    PNode p1;
+    int count = 0;
+    GetP(p1);
+    Free_Print(p1, count);
+    pt << count;
+}
