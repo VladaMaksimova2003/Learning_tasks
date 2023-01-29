@@ -1,0 +1,21 @@
+#include "pt4.h"
+using namespace std;
+//Дан указатель на корень непустого дерева. Считая от 0, вывести его глубину
+void Free_Print(PNode p1,int& Count, int i = 0) {
+    int depth = i;
+        if(p1->Right)Free_Print(p1->Right,Count, i+1);
+        if(p1->Left)Free_Print(p1->Left,Count, i+1);
+        if (depth > Count)
+            Count = depth;
+
+}
+void Solve()
+{
+    Task("TreeWork14");
+    PNode p1;
+    int i = 0;
+    int Count = 0;
+    GetP(p1);
+    Free_Print(p1,Count, i);
+    pt << Count;
+}

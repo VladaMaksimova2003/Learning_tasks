@@ -1,0 +1,22 @@
+#include "pt4.h"
+using namespace std;
+//Дан указатель на корень дерева и натупальное число К. Определить сколько вершино на уровне К, если нумерация от 0.
+void Free_Print(PNode p1, int& Count,int K, int i = 0) {
+    int depth = i;
+    if (p1->Right)Free_Print(p1->Right, Count,K, i + 1);
+    if (p1->Left)Free_Print(p1->Left, Count,K, i + 1);
+    if (depth ==  K)
+        ++Count;
+
+}
+void Solve()
+{
+    Task("TreeWork21");
+    PNode p1;
+    int i = 0;
+    int Count = 0, K;
+    pt >> K;
+    GetP(p1);
+    Free_Print(p1, Count,K, i);
+    pt << Count;
+}
