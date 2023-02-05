@@ -1,0 +1,101 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+//Реализовать набор основных действий для работы с вектором в виде программы
+using namespace std;
+	template <typename T>
+	void Display_Push(vector<T>& Input, T N) {
+		Input.push_back(N);
+	}
+	template <typename T>
+	void Display_Remove(vector<T>& Input, size_t index) {
+		auto it = Input.cbegin();
+		if (index < Input.size()) {
+			Input.erase(Input.cbegin() + index);
+			return;
+		}
+		cout << "Элемент не найден" << endl;
+	}
+	template <typename T>
+	void Display_Contents_N(vector<T>& Input, size_t index) {
+		auto it = Input.cbegin();
+		if (index < Input.size()) {
+			cout << *(it + index) << endl;
+			return;
+		}
+		cout << "Элемент не найден" << endl;
+	}
+	template <typename T>
+	void Display_Contents(vector<T>& Input) {
+		for (auto it = Input.cbegin(); it < Input.cend(); ++it)
+			cout << *it << endl;
+	}
+	template <typename T>
+	void Display_Count(vector<T>& Input) {
+		cout << Input.size() << endl;
+	}
+	template <typename T>
+	void Display_Delete(vector<T>& Input) {
+		Input.clear();
+	}
+
+
+
+int main() {
+	vector<int> v;
+	char i;
+	size_t index;
+	int value;
+	setlocale(LC_ALL, "Russian");
+
+	while(true) {
+		cout << "Выберите действие для работы в вектором " << endl;
+		cout << "1.Добавить элемент " << endl;
+		cout << "2.Удалить элемент " << endl;
+		cout << "3.Вывести элемент с номером N " << endl;
+		cout << "4.Вывести содержимое вектора " << endl;
+		cout << "5.Вывести количество элементов " << endl;
+		cout << "6.Очистить вектор " << endl;
+		cout << "7.Выход " << endl;
+		cin >> i;
+		switch (i) {
+		case '1':
+			cout << "Введите количество добавленных элементов ";
+			cin >> index;
+			cout << "Вводите нужные/ое значения/е " << endl;
+			for (size_t i = 0; i < index; ++i) {
+				cin >> value;
+				Display_Push(v, value);
+			}
+			break;
+		case '2':
+			cout << "Введите индекс нужного элемента ";
+			cin >> index;
+			Display_Remove(v, index);
+			cout << "Элемент удален " << endl;
+			break;
+		case '3':
+			cout << "Введите индекс нужного элемента ";
+			cin >> index;
+			Display_Contents_N(v, index);
+			break;
+		case '4':
+			Display_Contents(v);
+			break;
+		case '5':
+			cout << "Количество элементов в векторе: " << endl;
+			Display_Count(v);
+			break;
+		case '6':
+			Display_Delete(v);
+			cout << "Вектор очищен " << endl;
+			break;
+		case '7':
+			return 0;
+		default:
+			return 0;
+		}
+	};
+}

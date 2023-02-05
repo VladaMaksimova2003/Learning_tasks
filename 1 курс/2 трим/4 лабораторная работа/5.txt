@@ -1,0 +1,53 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+//5.Считать из текстового файла целые числа и занести их в вектор.Вывести вектор на экран.
+//Удалить из вектора все элементы, превышающие значение k и вывести вектор на экран.
+//Посчитать в полученном векторе количество элементов, равных значению N.
+void remove(std::vector<int>& v, size_t index) {
+	v.erase(v.begin() + index);
+}
+
+void main() {
+	setlocale(LC_ALL, "Russian");
+	vector <int> vec;
+	string str;
+	int K, N;
+	int i = 0;
+	cout << "Введите путь к файлу ";
+	cin >> str;
+	cout << "Значение K(для удаления) ";
+	cin >> K;
+	cout << "Значение N(для подсчета) ";
+	cin >> N;
+	ifstream file(str);
+	if (file.is_open()) {
+		file >> str;
+		do {
+			vec.push_back(stoi(str));
+			file >> str;
+		} while (!file.eof());
+		cout << "Вывод вектора на экран: ";
+		for (auto it = vec.cbegin(); it != vec.cend(); it++) {
+			std::cout << *it << ' ';
+		}//печать вектора
+		cout << endl;
+		for (int i = 0; i < vec.size(); ++i) {
+			if (vec[i] > K) {
+				remove(vec, i);
+				--i;
+			}
+		}//удаление элементов
+		cout << "Вывод вектора на экран после удаления: ";
+		for (auto it = vec.cbegin(); it != vec.cend(); it++) {
+			std::cout << *it << ' ';
+		}//печать вектора
+		cout << endl;
+		cout << "Количество чисел равных " <<" - "<< count(vec.cbegin(), vec.cend(), N);
+	}
+	file.close();
+	return;
+}
