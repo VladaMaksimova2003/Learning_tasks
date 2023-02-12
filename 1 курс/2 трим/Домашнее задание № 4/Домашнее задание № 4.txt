@@ -1,0 +1,144 @@
+#include <iostream>
+#include <fstream>
+#include <list>
+#include <iterator>
+#include <stack>
+#include <string>
+#include <algorithm>
+//1. Создать два списка (контейнер list). Вывести их на экран. 
+// Вставить второй список в первый перед элементом со значением k. 
+// Вывести первый список на экран. Использовать splice.
+//2. Сгенерировать список из N элементов.Список должен содержать числа от - 20 до 20. 
+// Удалить из списка все положительные числа.Обязательно использовать предикаты.
+//3. Считать из текстового файла арифметическое выражение в постфиксной записи(например, 5 6 3 * +).
+//Выражение  содержит знаки четырех арифметических действий.Вычислить его значение, используя для решения стек.
+using namespace std;
+template <typename T>
+void Display_Push(list<T>& Input, T N) {
+	Input.emplace_back(N);
+}
+
+template <typename T>
+void Display_Contents_List(list<T>& Input) {
+	for (auto it = Input.begin(); it != Input.end(); ++it)
+		cout << *it << " ";
+	cout << endl;
+}
+template <typename T>
+void Display_Contents_Stack(stack<T>& Input) {
+	while (!Input.empty()) {
+		cout << Input.top() << " ";
+		Input.pop();
+	}
+	cout << endl;
+}
+template <typename T>
+void Display_Delete(list<T>& Input) {
+	Input.clear();
+}
+template <typename T>
+void Display_Splice(list<T>& list1, list<T>& list2, int k1) {
+
+	list <int> ::iterator it1 = find(list1.begin(), list1.end(), k1);
+	if (it1 != list1.end())
+		list1.splice(it1, list2, list2.begin(), list2.cend());
+}
+
+void Get_Random_Number(list<int>& Input, size_t N)
+{
+	srand(time(NULL));
+	for (size_t i = 0; i < N; ++i) {
+		int num = -20 + rand() % 41;
+		Input.emplace_back(num);
+	}
+}
+
+bool Display_Delete_Positive(const int& value) {
+	return value > 0;
+}
+void Stack_Examples(stack <int>& steck, string str) {
+	int a, b;
+	if (str != "+" && str != "-" && str != "*" && str != "/") {
+		steck.emplace(stoi(str));
+		return;
+	}
+	a = steck.top();
+	steck.pop();
+	b = steck.top();
+	steck.pop();
+	if (str == "+")	steck.emplace(a + b);
+	else if (str == "-")steck.emplace(b - a);
+	else if (str == "*")steck.emplace(a * b);
+	else steck.emplace(b / a);
+}
+
+int main() {
+	list<int> list1;
+	list<int> list2;
+	stack <int> steck;
+	string str;
+	ifstream file;
+	int N, k1;
+	char i;
+	size_t index, size;
+	int value;
+	setlocale(LC_ALL, "Russian");
+	while (true) {
+		cout << "Выберите задание для проверки " << endl;
+		cin >> i;
+		switch (i) {
+		case '1':
+			cout << "Введите размер для list1 " << endl;
+			cin >> size;
+			cout << "Введите значение для list1 " << endl;
+			for (size_t i = 0; i < size; ++i) {
+				cin >> N;
+				Display_Push(list1, N);
+			}
+
+			cout << "Введите размер для list2 " << endl;
+			cin >> size;
+			cout << "Введите значение для list2 " << endl;
+			for (size_t i = 0; i < size; ++i) {
+				cin >> N;
+				Display_Push(list2, N);
+			}
+
+			cout << "Введите значение для K1" << endl;
+			cin >> k1;
+
+			Display_Splice(list1, list2, k1);
+			Display_Contents_List(list1);
+			Display_Delete(list1);
+			Display_Delete(list2);
+			break;
+		case '2':
+			cout << "Введите размер для list1 " << endl;
+			cin >> size;
+			Get_Random_Number(list1, size);
+			Display_Contents_List(list1);
+			list1.remove_if(Display_Delete_Positive);
+			Display_Contents_List(list1);
+			Display_Delete(list1);
+			break;
+		case '3':
+			cout << "Введите имя файла(пример должен быть без пробела в конце) ";
+			cin >> str;
+			file.open(str);
+			if (file) {
+				while (!file.eof()) {
+					file >> str;
+					cout << str << " ";
+					Stack_Examples(steck, str);
+				}
+				cout << " = ";
+				Display_Contents_Stack(steck);
+			}
+			file.close();
+			break;
+
+		default:
+			return 0;
+		}
+	}
+}
