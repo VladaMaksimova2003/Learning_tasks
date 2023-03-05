@@ -1,0 +1,16 @@
+def main():
+    degree = 0
+    number = float(input("Введите число: "))
+    size =  len(str(float(number))) - 1
+    if (number > 1):
+        while number > 1:
+            number = number / 10
+            degree = degree + 1
+    if (number < 0.1):
+        while number < 0.1:
+            number = number * 10
+            degree = degree - 1
+    print(f"Формат плавающей точки: x = {round(number, size)} * 10 ** {degree}")
+
+if __name__ == '__main__':
+    main()

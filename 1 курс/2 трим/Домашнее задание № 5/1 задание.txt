@@ -1,0 +1,47 @@
+import random
+class RockPaperScissors:
+    item = {-1|1: False,-2|2: True, 0: None}
+    options = {1: 'Камень', 2: 'Бумага', 3: 'Ножницы'}
+    wins = 0
+    losses = 0
+    ties = 0
+
+class Game:
+    def __init__(self):
+        self.player_item = self.get_player_item()
+        self.computer_item = self.get_computer_item()
+
+    def get_player_item(self):
+        player_input = int(input('Выберите:1 – Камень, 2 – Бумага, 3 – Ножницы '))
+        while player_input not in range(1, 4):
+            player_input = int(input('Еще раз: '))
+        return player_input
+
+    def get_computer_item(self):
+        return random.randint(1, 3)
+
+    def play(self):
+        while True:
+            result = RockPaperScissors.item[self.player_item - self.computer_item]
+            if result:
+                print(f'Выиграл человек при помощи {RockPaperScissors.options[self.player_item]}')
+                RockPaperScissors.wins = RockPaperScissors.wins + 1
+            elif result is False:
+                print(f'Выиграл компьютер при помощи {RockPaperScissors.options[self.computer_item]}')
+                RockPaperScissors.losses = RockPaperScissors.losses + 1
+            else:
+                print('Ничья')
+                RockPaperScissors.ties = RockPaperScissors.ties + 1
+            print(f"У вас есть {RockPaperScissors.wins} побед, {RockPaperScissors.losses} проигрышей, и {RockPaperScissors.ties} ничьи.")
+            break
+
+if __name__ == '__main__':
+        while True:
+            user_choice = input("Не желаете продолжить? y/n ").lower().strip()
+            if user_choice == 'y':
+                game = Game()
+                game.play()
+            elif user_choice == 'n':
+                break
+            else:
+                print("Invalid input!")

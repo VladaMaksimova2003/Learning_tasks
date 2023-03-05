@@ -1,0 +1,39 @@
+class Debt:
+    def __init__(self,to_whom, from_whom,how_many):
+        self.to_whom = to_whom
+        self.from_whom = from_whom
+        self.how_many = how_many
+
+def input_random_number(N, K, list):
+    for i in range(K):
+        print(f"{i + 1} расписка")
+        to_whom = int(input("Кому: "))
+        from_whom = int(input("От кого: "))
+        how_many = int(input("Сколько: "))
+        if to_whom == from_whom or to_whom > N or from_whom > N:
+            print("Некорректный ввод")
+            to_whom = int(input("Кому: "))
+            from_whom = int(input("От кого: "))
+        list.append(Debt(to_whom, from_whom,how_many))
+
+
+def calculation_sum(N, K, list):
+    sum_list = [0] * N
+    for i in range(K):
+        sum_list[list[i].to_whom - 1] = sum_list[list[i].to_whom - 1] - list[i].how_many
+        sum_list[list[i].from_whom - 1] = sum_list[list[i].from_whom - 1] + list[i].how_many
+
+    print("Баланс друзей: ")
+    for i in range(N):
+        print(f"{i + 1}: {sum_list[i]}")
+
+
+def main():
+    list = []
+    N = int(input("Введите количество друзей для ввода "))
+    K = int(input("Введите количество долговых расписок "))
+    input_random_number(N, K, list)
+    calculation_sum(N, K, list)
+
+if __name__ == '__main__':
+    main()

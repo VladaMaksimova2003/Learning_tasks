@@ -1,0 +1,67 @@
+import random
+
+def random_generator(rand_list):
+   n = 30
+   for i in range(n):
+      rand_list.append(random.randint(1, 30))
+   print(rand_list)
+
+def degree_of_numbers(rand_list,copy_list):
+   n = 30
+   for i in range(n):
+      if rand_list[i] > 10:
+         copy_list.append(rand_list[i]**2)
+      else:
+         copy_list.append(rand_list[i]**3)
+   print(copy_list)
+
+def inserting_numbers(copy_list):
+   i = 0
+   size = 30
+   while i < size:
+      if copy_list[i] % 2 == 0:
+         copy_list.insert(i, -10)
+         i = i + 1
+         size = size + 1
+      i = i + 1
+   print(copy_list)
+
+def removing_numbers(copy_list):
+   n = 30
+   temp = int(input("Введите значение N для удаления "))
+   for i in range(n):
+      if copy_list[i] == temp:
+         del copy_list[i]
+   print(copy_list)
+
+def sum_of_numbers(copy_list):
+   i = 0
+   temp = int(input("Введите значение N для вставки "))
+   while i < 30:
+      if copy_list[i] == temp:
+         copy_list.insert(i, 0)
+         copy_list.insert(i, 0)
+         copy_list.insert(i, 0)
+         break
+      i = i + 1
+   copy_list.append(sum(copy_list))
+   print(copy_list)
+
+
+def sorting_list(copy_list):
+   copy_list.sort(reverse=True)
+   print(copy_list)
+
+def main():
+   rand_list = list()
+   copy_list = list()
+   random_generator(rand_list)
+   degree_of_numbers(rand_list,copy_list)
+   inserting_numbers(copy_list)
+   removing_numbers(copy_list)
+   sum_of_numbers(copy_list)
+   sorting_list(copy_list)
+
+
+if __name__ == '__main__':
+    main()
