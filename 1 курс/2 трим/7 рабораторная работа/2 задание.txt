@@ -1,0 +1,26 @@
+#Определить платежную систему
+import re
+
+def payment_system(card):
+    if 12 > len(card) or len(card) > 19:
+        print("Неправильно набран номер")
+        return
+
+    system = {"2": "МИР",
+              "4": "Visa",
+              "5[1-5]": "Mastercard",
+              "36|38": "Diners Club",
+              "6011|65": "Discover",
+              "35": "JCB",
+              "34|37": "American Express",
+              "6": "China UnionPay",
+              "7": "УЭК"}
+    vendor = next(v for k, v in system.items() if re.match(k, card))
+    print(vendor)
+
+def main():
+    card = input("Введите номер карты: ")
+    payment_system(card)
+
+if __name__ == "__main__":
+    main()

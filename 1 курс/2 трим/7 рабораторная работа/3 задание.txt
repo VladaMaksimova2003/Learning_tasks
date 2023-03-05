@@ -1,0 +1,25 @@
+import ipaddress
+#Принадлежит ли заданый IPv4 адрес Гренландии
+def main():
+    flag = False
+    file_path = input("Введите путь к файлу с данными: ").strip()
+    console_address = input("Введите IP адрес: ").strip()
+    with open(file_path, 'r') as file:
+        file_line = file.readline()
+        while file_line:
+            start, stop = file_line.strip().split('-')
+            if int(ipaddress.ip_address(start))\
+                <= int(ipaddress.ip_address(console_address))\
+                    <= int(ipaddress.ip_address(stop)):
+                flag = True
+                break
+            file_line = file.readline()
+
+    if flag:
+        print("Данный адрес принадлежит Гренландии")
+    else:
+        print("Данный адрес не принадлежит Гренландии")
+
+
+if __name__ == "__main__":
+    main()

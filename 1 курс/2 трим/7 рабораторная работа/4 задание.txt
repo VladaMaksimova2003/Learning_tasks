@@ -1,0 +1,36 @@
+#Вывести построчно текст по 40 символов в строке без переносов
+
+def wrapped_lines(line, width=40):
+    whitespace = set(" \n\t\r")
+    length = len(line)
+    start = 0
+
+    while start < (length - width):
+        end = start + width + 1
+        temp = line[start:end]
+        try:
+            end = start + temp.index('\n')
+        except ValueError:
+            for i, ch in enumerate(reversed(temp)):
+                if ch in whitespace:
+                    end -= i
+                    break
+        yield line[start:end]
+        start = end + 1
+    yield line[start:]
+
+
+def main():
+    lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Phasellus ac commodo libero, at dictum leo. Nunc convallis est id purus porta,
+    malesuada erat volutpat. Cras commodo odio nulla. Nam vehicula risus id lacus
+    vestibulum. Maecenas aliquet iaculis dignissim. Phasellus aliquam facilisis
+    pellentesque ultricies. Vestibulum dapibus quam leo, sed massa ornare eget.
+    Praesent euismod ac nulla in lobortis.
+    Sed sodales tellus non semper feugiat."""
+    for line in wrapped_lines(lorem, 40):
+        print(line)
+
+
+if __name__ == "__main__":
+    main()

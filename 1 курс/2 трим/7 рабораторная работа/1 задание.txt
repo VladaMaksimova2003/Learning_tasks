@@ -1,0 +1,17 @@
+#Проверить корректность вводимой электронной почты 
+
+def validation(email):
+    if email.count('@') == 1 \
+            and email[0] != '@' \
+            and email.count('.') > 0 \
+            and email.rfind('.') > email.find('@'):
+        print("OK")
+    else:
+        print("WRONG")
+
+def main():
+    email = input("Введите email адрес: ")
+    validation(email)
+
+if __name__ == "__main__":
+    main()
