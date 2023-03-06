@@ -1,0 +1,20 @@
+def main():
+    punctuation = set(" ,!?;:-_+=-()")
+    file_path = input("Введите путь к файлу с данными: ").strip()
+    file_path2 = input("Введите путь к файлу для записи: ").strip()
+    with open(file_path,encoding = 'utf-8',mode = 'r') as file, open(file_path2,encoding = 'utf-8',mode = 'w') as file2:
+        string_line = file.readline().strip()
+        word_line = list(string_line)
+        letter_line = int(file.readline())
+        for i in range(len(word_line)):
+            if word_line[i] in punctuation:
+                file2.write(word_line[i])
+                continue
+            if(ord(word_line[i]) + letter_line > 1103):
+                file2.write(chr(letter_line - (1103 - ord(word_line[i])) + 1071))
+            elif(ord(word_line[i]) <= 1071 and ord(word_line[i]) + letter_line > 1071):
+                file2.write(chr(letter_line - (1071 - ord(word_line[i])) + 1039))
+            else:file2.write(chr(ord(word_line[i]) + letter_line))
+
+if __name__ == '__main__':
+    main()

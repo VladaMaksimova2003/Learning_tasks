@@ -1,0 +1,32 @@
+import ipaddress
+
+def validation(ip, flag):
+    try:
+        ip = ipaddress.ip_address(ip)
+        print("IP-адрес корректен")
+        return True
+    except ValueError:
+        if ip.count('.') < 3:
+            print("Адрес - это четыре числа, разделенные точками")
+            return False
+        str_list = ip.split(sep='.')
+        for i in range(4):
+            try:
+                if int(str_list[i]) > 255:
+                    print(f"{str_list[i]} превышает 255")
+                if int(str_list[i]) < 0:
+                    print(f"{str_list[i]} меньше 0")
+            except ValueError:
+                print(f"{str_list[i]}- не целое число")
+        return False
+
+
+def main():
+    flag = False
+    while flag == False:
+        ip = input("Введите ip адрес ").strip()
+        flag = validation(ip, flag)
+
+
+if __name__ == '__main__':
+    main()
