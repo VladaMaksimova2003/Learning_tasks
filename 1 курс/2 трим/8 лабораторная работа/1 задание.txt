@@ -1,0 +1,20 @@
+def main():
+    toIgnore = [' ', '!', '-', ':', '?', ',']
+    synonyms_dict = dict()
+    N = int(input('Введите количество пар слов:  '))
+    for i in range(1, N+1):
+        word = input(f'{i} пара: ').split()
+        word = list(set(word) - set(toIgnore))
+        synonyms_dict[word[0].lower()] = word[1]
+        synonyms_dict[word[1].lower()] = word[0]
+    while True:
+        temp_synonyms = input('Введите слово: ').strip().lower()
+        if temp_synonyms in synonyms_dict:
+            print('Синоним: ', synonyms_dict[temp_synonyms])
+            break
+        else:
+            print('Такого слова в словаре нет.')
+
+
+if __name__ == '__main__':
+    main()

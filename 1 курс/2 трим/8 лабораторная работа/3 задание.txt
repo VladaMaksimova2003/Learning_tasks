@@ -1,0 +1,28 @@
+def count_letter(word, list_palindrome):
+    count = 0
+
+    for letter in list_palindrome:
+        if letter in word:
+            value = word[letter] + 1
+            word[letter] = value
+        else:
+            word[letter] = 1
+
+    for letter in word:
+        if word[letter] % 2 != 0:
+            count = count + 1
+
+    if count > 1:
+        print('Нельзя сделать палиндромом')
+        return
+    print('Можно сделать палиндромом')
+
+
+def main():
+    word = {}
+    list_palindrome = list(input('Введите строку:  '))
+    count_letter(word, list_palindrome)
+
+
+if __name__ == '__main__':
+    main()

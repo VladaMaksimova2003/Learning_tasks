@@ -1,0 +1,35 @@
+def count_height(name, heights, family_tree):
+    if name not in family_tree:
+        heights[name] = 0
+        return 0
+    parent = family_tree[name]
+    if parent in heights:
+        value = heights[parent] + 1
+    else:
+        value = count_height(parent, heights, family_tree) + 1
+    heights[name] = value
+    return value
+
+
+def main():
+    n = int(input('Введите количество человек: '))
+    heights = {}
+    family_tree = {}
+    print('Введите имя ребенка, родителя через пробел')
+    for i in range(1, n):
+        temp = input(f'{i} пара: ')
+        child, parent = temp.split()
+        family_tree[child] = parent
+    all_man = set(family_tree.keys()) | set(family_tree.values())
+
+    for name in all_man:
+        if name not in heights:
+            count_height(name, heights, family_tree)
+
+    print('“Высота” каждого члена семьи: ')
+    for name in sorted(heights):
+        print(name, heights[name])
+
+
+if __name__ == '__main__':
+    main()
