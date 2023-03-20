@@ -1,0 +1,41 @@
+def maxPathSum(triangle, robot_path):
+    dp = [[0] * len(row) for row in triangle]
+    i = len(dp)-1
+    while i >= 0:
+        for j in range(len(dp[i])):
+            if i == len(triangle)-1:
+                dp[i][j] = triangle[i][j]
+            else:
+                dp[i][j] = triangle[i][j] + max(dp[i+1][j], dp[i+1][j+1])
+        i -= 1
+
+    size = len(dp)-1
+    j = i = 0
+    while i < size:
+        if max(dp[i+1][j], dp[i+1][j+1]) is dp[i+1][j]:
+            robot_path += 'L '
+        else:
+            robot_path += 'R '
+            j += 1
+        i += 1
+    return dp[0][0], robot_path
+
+
+def main():
+    robot_path = ' '
+    triangle = []
+    file_name = input('Введите путь к файлу: ').strip()
+    file1_name = input('Введите путь к файлу для записи: ').strip()
+    with open(file_name, 'r', encoding='utf-8') as file,\
+         open(file1_name, 'w', encoding='utf-8') as file1:
+        size = int(file.readline())
+        for i in range(size):
+            num = file.readline()
+            triangle.append([int(x) for x in num.split()])
+        max_sum, robot_path = maxPathSum(triangle, robot_path)
+        file1.write(f'{robot_path}\n')
+        file1.write(str(max_sum))
+
+
+if __name__ == '__main__':
+    main()

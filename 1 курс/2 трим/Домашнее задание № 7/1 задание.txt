@@ -1,0 +1,33 @@
+def read_data():
+    with open('D:/input.txt', 'r') as file:
+        n, l = map(int, file.readline().split())
+        frogs = tuple(map(int, file.readline().split()))
+    return n, l, frogs
+
+
+def write_data(total_ways):
+    with open('D:/output.txt', 'w') as file:
+        file.write(str(total_ways))
+
+
+def task():
+    n, l, frogs = read_data()
+    ways = [0 for i in range(n + 1)]
+    ways[0] = 1
+    for i in range(1, n + 1):
+        if i in frogs:
+            continue
+        sum_ = 0
+        for j in range(1, l + 1):
+            if (i - j >= 0):
+                sum_ += ways[i - j]
+        ways[i] = sum_
+    write_data(ways[-1])
+
+
+def main():
+    task()
+
+
+if __name__ == '__main__':
+    main()
