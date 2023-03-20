@@ -1,0 +1,54 @@
+import tkinter as tk
+from datetime import datetime
+
+
+class Test():
+    def __init__(self):
+        self.init_app('Секундомер', '250x200')
+
+        self.start_label = self.init_label('00:00:00', 1, 0)
+        self.stop_label = self.init_label('00:00:00', 1, 1)
+        self.time_diff_label = self.init_label('Прошло --:--:--', 1, 2)
+
+        self.button_start = self.init_button('Начать', lambda: [self.start()], 0, 0)
+        self.button_stop = self.init_button('Стоп', lambda: [self.stop(), self.time_diff()], 0, 1)
+
+        self.root.mainloop()
+
+    def init_app(self, title, size):
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.root.resizable(width=False, height=False)
+        self.root.geometry(size)
+
+    def init_button(self, text, command, column, row):
+        button = tk.Button(self.root, text=text, command=command)
+        button.grid(column=column, row=row)
+        return button
+
+    def init_label(self, text, column, row):
+        label = tk.Label(self.root, text=text)
+        label.grid(column=column, row=row)
+        return label
+
+    def start(self):
+        self.start_time = datetime.now()
+        self.start_label['text'] = self.start_time.strftime('%H:%M:%S')
+
+    def stop(self):
+        self.stop_time = datetime.now()
+        self.stop_label['text'] = self.stop_time.strftime('%H:%M:%S')
+
+    def time_diff(self):
+        total_secs = self.stop_time - self.start_time
+
+        self.time_diff_label['text'] = 'Прошло {:02d}:{:02d}:{:02d}'.format(
+            total_secs.seconds // 3600,
+            (total_secs.seconds // 60) % 60,
+            total_secs.seconds % 60,
+        )
+        self.time_diff_label.grid(column=1, row=2)
+
+
+if __name__ == '__main__':
+    app = Test()

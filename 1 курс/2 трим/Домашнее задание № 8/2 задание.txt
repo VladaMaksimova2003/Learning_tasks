@@ -1,0 +1,100 @@
+import random
+import tkinter as tk
+
+
+class Test():
+    def __init__(self):
+        self.init_app('Тест', '600x500')
+
+        self.ask = self.init_label()
+        self.correct_answer = self.init_label()
+        self.ask_input = self.init_text(10, 25, 'light yellow')
+        self.button_Start = self.init_button(2, 20, 'Продолжить', lambda: self.control())
+        self.button_Cont = self.init_button(2, 20, 'Проверить', lambda: self.output())
+        self.answer = self.init_text(5, 25, 'light cyan')
+        self.dict_test = {}
+        self.count = 1
+        self.count_correct_answer = 0
+        self.i = ''
+
+        self.read_files()
+        self.control()
+
+        self.root.mainloop()
+
+    def init_app(self, title, size):
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.root.resizable(width=False, height=False)
+        self.root.geometry(size)
+
+    def init_label(self):
+        label = tk.Label(self.root)
+        label.pack()
+        return label
+
+    def init_text(self, height, width, bg):
+        text = tk.Text(
+            self.root,
+            height=height,
+            width=width,
+            bg=bg,
+        )
+        text.pack()
+        return text
+
+    def init_button(self, height, width, text, command):
+        button = tk.Button(
+            self.root,
+            height=height,
+            width=width,
+            text=text,
+            command=command,
+        )
+        button.pack()
+        return button
+
+    def read_files(self):
+        questions_file_path = input('Введите путь к файлу с данными: ').strip()
+        anwwers_file_path = input('Введите путь к файлу для записи: ').strip()
+        with open(questions_file_path, encoding='utf-8', mode='r') as questions_file,\
+                open(anwwers_file_path, encoding='utf-8', mode='r') as answers_file:
+            while True:
+                file_ask = questions_file.readline().strip()
+                file_answer = answers_file.readline().strip()
+                if not file_answer:
+                    break
+                self.dict_test[file_ask] = file_answer
+
+    def output(self):
+        ask_input = self.ask_input.get(1.0, tk.END + '-1c')
+        if (ask_input == self.dict_test[self.i]):
+            self.answer.insert(tk.END, 'Правильно')
+            self.answer.update()
+            self.count_correct_answer = self.count_correct_answer + 1
+        else:
+            self.answer.insert(tk.END, self.dict_test[self.i])
+        del self.dict_test[self.i]
+
+    def control(self):
+        if (self.count > 5):
+            self.button_Start.pack_forget()
+            self.button_Cont.pack_forget()
+            self.ask.pack_forget()
+            self.answer.pack_forget()
+            self.ask_input.pack_forget()
+
+            result = self.count_correct_answer if self.count_correct_answer >= 2 else 2
+            self.correct_answer['text'] = f'Ваша оценка - {result}'
+            self.correct_answer.pack()
+
+        self.count = self.count + 1
+        self.answer.delete('1.0', tk.END)
+        self.ask_input.delete('1.0', tk.END)
+        self.i = random.choice(list(self.dict_test.keys()))
+        self.ask['text'] = self.i
+        self.ask.update()
+
+
+if __name__ == '__main__':
+    app = Test()
