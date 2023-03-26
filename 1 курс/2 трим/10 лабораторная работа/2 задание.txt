@@ -1,0 +1,54 @@
+import tkinter as tk
+
+
+class People:
+    def __init__(self):
+        self.init_app('Средний рост', '425x400')
+        self.label = self.init_label('Первый ученик', 0, 0)
+        self.scale1 = self.init_scale(0, 1)
+        self.label = self.init_label('Второй ученик', 1, 0)
+        self.scale2 = self.init_scale(1, 1)
+        self.label = self.init_label('Третий ученик', 2, 0)
+        self.scale3 = self.init_scale(2, 1)
+        self.button = self.init_button(
+            'Средний рост',
+            20,
+            lambda: self.change(self.scale1.get(), self.scale2.get(), self.scale3.get()),
+            1,
+            3,
+        )
+        self.label_result = self.init_label('', 1, 4)
+        self.root.mainloop()
+
+    def init_app(self, title, size):
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.root.geometry(size)
+        self.root.resizable(width=False, height=False)
+
+    def init_button(self, text, width, command, column, row):
+        button = tk.Button(self.root, width=width, text=text, command=command)
+        button.grid(column=column, row=row)
+        return button
+
+    def init_label(self, text, column, row):
+        label = tk.Label(self.root, text=text)
+        label.grid(column=column, row=row)
+        return label
+
+    def init_scale(self, column, row):
+        scale = tk.Scale(
+            orient='vertical',
+            length=200,
+            from_=180.0,
+            to=120.0,
+        )
+        scale.grid(column=column, row=row)
+        return scale
+
+    def change(self, val1, val2, val3):
+        self.label_result['text'] = round((val1 + val2 + val3) / 3)
+
+
+if __name__ == '__main__':
+    People()

@@ -1,0 +1,107 @@
+import tkinter as tk
+
+
+class Second_Frame(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.first_name = self.init_label('Имя: ', 3, 0)
+        self.last_name = self.init_label('Фамилия: ', 3, 1)
+        self.gender = self.init_label('Пол: ', 3, 2)
+        self.year = self.init_label('Год рождения: ', 3, 4)
+        self.course = self.init_label('Выбранный курс: ', 3, 5)
+
+    def init_label(self, text, column, row):
+        label = tk.Label(text=text)
+        label.grid(column=column, row=row)
+        return label
+
+
+class First_frame(tk.Frame):
+    def __init__(self, master, fsecond):
+        super().__init__(master)
+        self.label = self.init_label('Введите ваше имя ', 0, 0)
+        self.first_name = self.init_text(1, 0)
+        self.label = self.init_label('Введите вашу фамилию', 0, 1)
+        self.last_name = self.init_text(1, 1)
+        self.gender = tk.StringVar(value='Мужской')
+        self.btn_man = self.init_radiobutton('Мужской', 'Мужской', self.gender, 0, 2)
+        self.btn_woman = self.init_radiobutton('Женский', 'Женский', self.gender, 1, 2)
+        self.list_box_year = self.init_list_box(0, 3)
+        self.list_box_course = self.init_list_box(1, 3)
+        self.add_list()
+        self.button_send = self.init_button('Отправить', 20, lambda: self.add_info(), 0, 4)
+        self.button_reset = self.init_button('Сброс', 20, lambda: self.del_info(), 1, 4)
+        self.second = fsecond
+
+    def add_list(self):
+        course = ['Математика', 'Русский язык', 'Шахматы', 'Шашки', 'Карты']
+        year = ['2005', '2006', '2007', '2008', '2009', '2010']
+
+        for i in range(len(course)):
+            self.list_box_course.insert(tk.END, course[i])
+            self.list_box_course.itemconfig(i)
+
+        for i in range(len(year)):
+            self.list_box_year.insert(tk.END, year[i])
+            self.list_box_year.itemconfig(i)
+
+    def init_radiobutton(self, text, value, gender, column, row):
+        button = tk.Radiobutton(text=text, value=value, variable=gender)
+        button.grid(column=column, row=row)
+        return button
+
+    def init_label(self, text, column, row):
+        label = tk.Label(text=text)
+        label.grid(column=column, row=row)
+        return label
+
+    def init_text(self, column, row):
+        text = tk.Entry()
+        text.grid(column=column, row=row)
+        return text
+
+    def init_list_box(self, column, row):
+        list_box = tk.Listbox(self, selectmode='SINGLE', exportselection=0)
+        list_box.grid(column=column, row=row)
+        return list_box
+
+    def init_button(self, text, width, command, column, row):
+        button = tk.Button(self, width=width, text=text, command=command)
+        button.grid(column=column, row=row)
+        return button
+
+    def add_info(self):
+        if not (self.first_name.get() and self.last_name.get()):
+            return
+        self.second.first_name.config(text='Имя: ' + self.first_name.get())
+        self.second.last_name.config(text='Фамилия: ' + self.last_name.get())
+        self.second.gender.config(text='Пол: ' + self.gender.get())
+        self.second.year.config(
+            text='Год рождения: ' + self.list_box_year.get(self.list_box_year.curselection()))
+        self.second.course.config(
+            text='Выбранный курс: ' + self.list_box_course.get(self.list_box_course.curselection()))
+
+    def del_info(self):
+        self.second.first_name.config(text='Имя: ')
+        self.second.last_name.config(text='Фамилия: ')
+        self.second.gender.config(text='Пол: ')
+        self.second.year.config(text='Год рождения: ')
+        self.second.course.config(text='Выбранный курс: ')
+        self.first_name.delete('0', tk.END)
+        self.last_name.delete('0', tk.END)
+
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title('Запись на курсы')
+        self.geometry('800x400')
+        self.frame_second = Second_Frame(self)
+        self.frame_first = First_frame(self, self.frame_second)
+        self.frame_first.grid()
+        self.frame_second.grid()
+        self.mainloop()
+
+
+if __name__ == '__main__':
+    App()
