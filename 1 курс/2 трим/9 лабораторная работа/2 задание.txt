@@ -1,0 +1,98 @@
+from random import shuffle
+
+
+class Card:
+    def __init__(self, title, value):
+        self.title = title
+        self.value = value
+
+    def __str__(self):
+        return self.title
+
+
+class Deck:
+    def __init__(self):
+        self.deck = [
+            *(Card(str(i), i) for i in range(2, 11)),
+            Card('Jack', 10),
+            Card('Queen', 10),
+            Card('King', 10),
+            Card('Ace', 1),
+        ]
+        shuffle(self.deck)
+
+
+class Player:
+    def __init__(self):
+        self.score = 0
+        self.hand = []
+
+
+class Game:
+    def __init__(self):
+        self.deck = Deck()
+        self.user = Player()
+        self.computer = Player()
+
+    def start(self):
+        while True:
+            user_choice = input('Начать? y/n ').lower().strip()
+            if user_choice == 'y':
+                self.play()
+            elif user_choice == 'n':
+                break
+            else:
+                print('Invalid input!')
+            self.refresh()
+            print()
+
+    def print_status(self, card):
+        print('Карта - {}. Количество ваших очков - {}, очки противника - {}'
+              .format(card, self.user.score, self.computer.score))
+
+    def add_card(self, player):
+        card = self.deck.deck.pop()
+        player.hand.append(card)
+        if card.title == 'Ace' and 21 < player.score:
+            player.score += 1
+        else:
+            player.score += card.value
+        self.print_status(card)
+
+    def compare(self):
+        if (self.computer.score < self.user.score or 21 < self.computer.score and self.user.score <= 21):
+            print('Вы выиграли, количество ваших очков {}, у компьютера - {}'
+                  .format(self.user.score, self.computer.score))
+        elif (self.user.score < self.computer.score or 21 < self.user.score and self.computer.score <= 21):
+            print('Вы проиграли, количество ваших очков {}, у компьютера - {}'
+                  .format(self.user.score, self.computer.score))
+        else:
+            print('Ничья, количество ваших очков {}, у компьютера - {}'
+                  .format(self.user.score, self.computer.score))
+
+    def play(self):
+        self.add_card(self.user)
+        self.add_card(self.user)
+        self.add_card(self.computer)
+        self.add_card(self.computer)
+        prev_user_choice = 'y'
+        while True:
+            if prev_user_choice == 'y':
+                user_choice = input('Берете карту? y/n ').lower().strip()
+            prev_user_choice = user_choice
+            if user_choice == 'y':
+                self.add_card(self.user)
+            if self.computer.score < 19:
+                self.add_card(self.computer)
+            if 21 < self.user.score or 21 < self.computer.score or (user_choice == 'n' and 19 <= self.computer.score):
+                self.compare()
+                break
+
+    def refresh(self):
+        self.deck = Deck()
+        self.user = Player()
+        self.computer = Player()
+
+
+if __name__ == '__main__':
+    Game().start()

@@ -1,0 +1,95 @@
+from math import pi, sqrt
+
+
+class Circle:
+    def __init__(self, x=0, y=0, r=1):
+        self.y = y
+        self.x = x
+        self.r = r
+
+    def get_perimetr(self):
+        return 2 * pi * self.r
+
+    def get_square(self):
+        return pi * (self.r ** 2)
+
+    def increase_r(self, k):
+        self.r = self.r * k
+
+    def is_touching_circle(self, circle):
+        return abs(self.r - circle.r) <= \
+            sqrt((self.x - circle.x) ** 2 + (self.y - circle.y) ** 2) <= \
+            self.r + circle.r
+
+    def __str__(self):
+        return f'X = {self.x}, Y = {self.y}, R = {self.r}'
+
+
+def create_circle(circles):
+    try:
+        temp_x = float(input('Введите значения X для окружности: '))
+        temp_y = float(input('Y: '))
+        temp_r = float(input('R: '))
+        circles.append(Circle(temp_x, temp_y, temp_r))
+    except ValueError:
+        print('Ошибочный ввод')
+
+
+def calculate_square(circles):
+    print(f'Площадь круга = {circles[-1].get_square()}')
+
+
+def calculate_perimetr(circles):
+    print(f'Периметр круга = {circles[-1].get_perimetr()}')
+
+
+def increase_r(circles):
+    k = float(input('Введите значение для увеличесния радиуса: '))
+    circles[-1].increase_r(k)
+    print(circles[-1])
+
+
+def is_circles_touching(circles):
+    try:
+        n = int(input('Введите номер для окружности n: '))
+        m = int(input('Введите номер для окружности m: '))
+        if (circles[n-1].is_touching_circle(circles[m-1])):
+            print('Окружности пересекаются')
+        else:
+            print('Окружности не пересекаются')
+    except ValueError:
+        print('Ошибочный ввод')
+    except IndexError:
+        print('Несуществующий индекс')
+
+
+def print_options():
+    print('1)Создать окружность')
+    print('2)Найти площадь окружности')
+    print('3)Найти периметр')
+    print('4)Увеличить радиус окружности')
+    print('5)Определить пересечение окружности с номером n с окружностью с номером m')
+    print('6)Выход')
+
+
+def main():
+    circles = []
+    options = {
+        '1': create_circle,
+        '2': calculate_square,
+        '3': calculate_perimetr,
+        '4': increase_r,
+        '5': is_circles_touching,
+    }
+    while True:
+        print_options()
+        choice = input('Введите число ').strip()
+        option = options.get(choice, None)
+        if option is None:
+            break
+        option(circles)
+        print()
+
+
+if __name__ == '__main__':
+    main()
