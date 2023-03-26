@@ -1,0 +1,157 @@
+import tkinter as tk
+
+
+class Tic_Tac_Toe:
+    def __init__(self):
+        self.init_app('Крестики-нолики', '380x600')
+        self.Label_win = tk.Label(self.root)
+        self.field = [
+            ['' for x in range(3)] for y in range(3)
+        ]
+        for row in range(3):
+            for column in range(3):
+                self.field[row][column] = tk.Button(text='', font=('consolas', 40), width=4, height=2,
+                                                    command=lambda row=row, column=column: self.init_user(column, row))
+                self.field[row][column].grid(row=row, column=column)
+        self.user_sign = 'x'
+        self.computer_sign = '0'
+
+        self.scores = {
+            self.user_sign: -1,
+            self.computer_sign: 1,
+            'draw': 0
+        }
+        self.root.mainloop()
+
+    def init_app(self, title, size):
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.root.resizable(width=False, height=False)
+        self.root.geometry(size)
+
+    def init_button(self, column, row, command):
+        button = tk.Button(self.root, command=command)
+        button.place(x=column, y=row, width=100, height=100)
+        return button
+
+    def init_user(self, column, row):
+        if self.field[row][column]['text'] == '':
+            self.field[row][column].config(bg='green')
+            self.main(column, row)
+
+    def init_computer(self, column, row):
+        self.field[row][column].config(bg='red')
+
+    def is_draw(self, field):
+        count = 0
+        for row in range(3):
+            for column in range(3):
+                count += 1 if '' == field[row][column] else 0
+        return count == 0
+
+    def get_opponent_sign(self, sign):
+        return '0' if sign == 'x' else 'x'
+
+    def is_win(self, sign, field):
+        opponent_sign = self.get_opponent_sign(sign)
+
+        for y in range(3):
+            row = [field[y][0], field[y]
+                   [1], field[y][2]]
+            if opponent_sign not in row and '' not in row:
+                return True
+
+        for x in range(3):
+            column = [field[0][x], field[1]
+                   [x], field[2][x]]
+            if opponent_sign not in column and '' not in column:
+                return True
+
+        diagonal = [field[0][0], field[1]
+                    [1], field[2][2]]
+        if opponent_sign not in diagonal and '' not in diagonal:
+            return True
+        diagonal = [field[0][2], field[1]
+                    [1], field[2][0]]
+        if opponent_sign not in diagonal and '' not in diagonal:
+            return True
+
+        return False
+
+    def minimax(self, board, is_True):
+        if self.is_win(self.computer_sign, board):
+            return self.scores[self.computer_sign]
+        if self.is_win(self.user_sign, board):
+            return self.scores[self.user_sign]
+        if self.is_draw(board):
+            return self.scores['draw']
+
+        if is_True:
+            best_score = -1
+            for y in range(3):
+                for x in range(3):
+                    if board[y][x] == '':
+                        board[y][x] = self.computer_sign
+                        score = self.minimax(board, False)
+                        board[y][x] = ''
+                        best_score = max(best_score, score)
+        else:
+            best_score = 1
+            for y in range(3):
+                for x in range(3):
+                    if board[y][x] == '':
+                        board[y][x] = self.user_sign
+                        score = self.minimax(board, True)
+                        board[y][x] = ''
+                        best_score = min(best_score, score)
+
+        return best_score
+
+    def get_computer_position(self, board):
+        move = None
+        best_score = -1
+        for y in range(3):
+            for x in range(3):
+                if board[y][x] == '':
+                    board[y][x] = self.computer_sign
+                    score = self.minimax(board, False)
+                    board[y][x] = ''
+                    if score > best_score:
+                        best_score = score
+                        move = (x, y)
+        return move
+
+    def disabled_button(self):
+        for y in range(3):
+            for x in range(3):
+                self.field[y][x].config(state='disabled')
+
+    def main(self, column, row):
+        x, y = column, row
+        self.field[y][x].config(text=(self.user_sign))
+        board = [
+            [self.field[y][x]['text'] for x in range(3)] for y in range(3)
+        ]
+        if self.is_draw(board) and self.Label_win['text'] == '':
+            self.Label_win['text'] = 'Ничья'
+            self.Label_win.grid()
+
+        if self.is_win(self.user_sign, board) and self.Label_win['text'] == '':
+            self.Label_win['text'] = 'Вы победили'
+            self.Label_win.grid()
+            self.disabled_button()
+
+        move = self.get_computer_position(board)
+        if move is not None:
+            x, y = move
+            self.field[y][x].config(text=(self.computer_sign))
+            board[y][x] = self.computer_sign
+            self.init_computer(x, y)
+            if self.is_win(self.computer_sign, board) and self.Label_win['text'] == '':
+                self.Label_win['text'] = 'Вы проиграли'
+                self.Label_win.grid()
+                self.disabled_button()
+
+
+if __name__ == '__main__':
+    Tic_Tac_Toe()
