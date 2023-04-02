@@ -1,0 +1,87 @@
+import tkinter as tk
+import tkinter.font as tkFont
+
+
+class Simple:
+
+    def __init__(self):
+        self.init_app()
+        self.fontex = tkFont.Font(family='Calibri', size=16, weight='normal', slant='roman')
+        self.editor = tk.Text(self.root, wrap='word')
+        main_menu = tk.Menu()
+        color_menu = tk.Menu()
+        color_menu_ground = tk.Menu()
+        color_menu_text = tk.Menu()
+        font_menu = tk.Menu()
+        inscription = tk.Menu()
+        inscription.add_command(label='Курсив', command=lambda: self.inscription_slant())
+        inscription.add_command(label='Полужирный', command=lambda: self.inscription_weight())
+        inscription.add_command(label='Подчеркивание', command=lambda: self.inscription_underline())
+        inscription.add_command(label='Обычный', command=lambda: self.inscription_normal())
+
+        color_menu_ground.add_command(label='Черный', command=lambda: self.color_ground('black'))
+        color_menu_ground.add_command(label='Белый', command=lambda: self.color_ground('white'))
+        color_menu_ground.add_command(label='Голубой', command=lambda: self.color_ground('blue'))
+        color_menu_ground.add_command(label='Зеленый', command=lambda: self.color_ground('green'))
+
+        color_menu_text.add_command(label='Черный', command=lambda: self.color_fground('black'))
+        color_menu_text.add_command(label='Белый', command=lambda: self.color_fground('white'))
+        color_menu_text.add_command(label='Голубой', command=lambda: self.color_fground('blue'))
+        color_menu_text.add_command(label='Зеленый', command=lambda: self.color_fground('green'))
+
+        color_menu.add_cascade(label='Текст', menu=color_menu_text)
+        color_menu.add_cascade(label='Фон', menu=color_menu_ground)
+
+        font_menu.add_cascade(label='Times', command=lambda: self.font_menu('Times'))
+        font_menu.add_cascade(label='Helvetica', command=lambda: self.font_menu('Helvetica'))
+        font_menu.add_cascade(label='Courier', command=lambda: self.font_menu('Courier'))
+        font_menu.add_cascade(label='Calibri', command=lambda: self.font_menu('Calibri'))
+        font_menu.add_cascade(label='Начертание', menu=inscription)
+
+        main_menu.add_cascade(label='Шрифт', menu=font_menu)
+        main_menu.add_cascade(label='Цвет', menu=color_menu)
+        main_menu.add_cascade(label='Очистка', command=lambda: self.clear())
+
+        self.editor.pack(fill=tk.BOTH, expand=True)
+        self.editor.configure(font=self.fontex)
+        self.root.configure(menu=main_menu)
+        self.root.mainloop()
+
+    def init_app(self):
+        self.root = tk.Tk()
+        self.root.title('Редактор Simple')
+        self.root.geometry('600x600')
+        self.root.option_add('*tearOff', tk.FALSE)
+        self.root.resizable(width=False, height=False)
+
+    def clear(self):
+        self.editor.delete('1.0', tk.END)
+
+    def color_ground(self, color):
+        self.editor.configure(bg=color)
+
+    def color_fground(self, color):
+        self.editor.configure(fg=color)
+
+    def font_menu(self, cur_font):
+        self.fontex.configure(family=cur_font)
+        self.editor.configure(font=self.fontex)
+
+    def inscription_weight(self):
+        self.fontex.configure(weight='bold')
+        self.editor.configure(font=self.fontex)
+
+    def inscription_slant(self):
+        self.fontex.configure(slant='italic')
+        self.editor.configure(font=self.fontex)
+
+    def inscription_underline(self):
+        self.fontex.configure(underline=True)
+        self.editor.configure(font=self.fontex)
+
+    def inscription_normal(self):
+        self.fontex.configure(weight='normal', slant='roman', underline=False)
+        self.editor.configure(font=self.fontex)
+
+
+app = Simple()
